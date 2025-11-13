@@ -1,0 +1,31 @@
+# Etapa de construção (Build Phase)
+# Usamos uma imagem base que já tem o Maven 3.8 e o JDK 17 instalados
+FROM maven:3.8-openjdk-17 AS BUILD
+
+# Define o diretório de trabalho dentro do container. Todos os comandos subsequentes serão executados dentro deste diretório.
+WORKDIR /app
+
+# Copia todos os arquivos do diretório atual (local) para dentro do container no diretório /app
+COPY . .
+
+# Executa o Maven para construir o projeto Java.
+# A opção -DskipTests ignora a execução de testes durante a construção.
+RUN mvn clean install -DskipTests
+
+# Etapa final (Final Image Phase)
+# Usamos uma imagem base mais leve contendo apenas o OpenJDK 17 com Alpine Linux
+FROM openjdk:17-jdk-alpine
+
+# Define o diretório de trabalho dentro da imagem final
+WORKDIR /app
+
+# Copia o arquivo .jar gerado pela fase de construção (do container BUILD) para o diretório /app no container final.
+# O arquivo .jar gerado está no diretório /app/target e é copiado com o nome app.jar
+COPY --from=build /app/target/*.jar app.jar
+
+# Expõe a porta 8083 no container para permitir a comunicação com o container do lado de fora (necessário para acesso externo)
+EXPOSE 8083
+
+# Define o comando que será executado quando o container for iniciado:
+# Inicia o aplicativo Java utilizando o arquivo .jar copiado.
+CMD ["java", "-jar", "/app/bff-agendador-tarefas.jar"]
