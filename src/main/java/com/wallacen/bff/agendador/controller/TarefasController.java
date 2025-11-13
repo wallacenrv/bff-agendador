@@ -53,6 +53,7 @@ public class TarefasController {
     @ApiResponse(responseCode = "200", description = "Tarefas encontradas")
     @ApiResponse(responseCode = "404", description = "Tarefa não encontrado")
     @ApiResponse(responseCode = "500", description = "erro interno de servidor")
+    @ApiResponse(responseCode = "401", description = "usuario não encontrado")
     public ResponseEntity <List<TarefaDto>> buscaListaDeTarefasPorEmail(@RequestHeader( value = "Authorization", required = false) String token ){
         return ResponseEntity.ok(tarefaService.buscaTarefasPorEmail(token));
     }
@@ -62,6 +63,7 @@ public class TarefasController {
     @ApiResponse(responseCode = "200", description = "Tarefa apagada")
     @ApiResponse(responseCode = "404", description = "Tarefa não encontrado")
     @ApiResponse(responseCode = "500", description = "erro interno de servidor")
+    @ApiResponse(responseCode = "403", description = "Tarefa id não encontrado")
     public ResponseEntity<Void> deletarTarefaPorId(@RequestParam String id, @RequestHeader( value = "Authorization", required = false) String token ){
         tarefaService.apagarTarefa(id, token);
         return ResponseEntity.ok().build();
@@ -83,6 +85,7 @@ public class TarefasController {
     @ApiResponse(responseCode = "200", description = "Tarefa atualizada")
     @ApiResponse(responseCode = "404", description = "Tarefa não atualizada")
     @ApiResponse(responseCode = "500", description = "erro interno de servidor")
+    @ApiResponse(responseCode = "403", description = "Tarefa id não encontrado")
     public ResponseEntity<TarefaDto> alterarTarefa(@RequestBody TarefaDto tarefaDto,
                                                    @RequestParam("id")String id,
                                                    @RequestHeader( value = "Authorization", required = false) String token ){
