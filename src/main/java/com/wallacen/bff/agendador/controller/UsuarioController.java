@@ -1,6 +1,7 @@
 package com.wallacen.bff.agendador.controller;
 
 import com.wallacen.bff.agendador.business.dtos.dot.EnderecoDto;
+import com.wallacen.bff.agendador.business.dtos.dot.ResponseCepDto;
 import com.wallacen.bff.agendador.business.dtos.dot.TelefoneDto;
 import com.wallacen.bff.agendador.business.dtos.dot.UsuarioDto;
 import com.wallacen.bff.agendador.business.dtos.service.UsuarioService;
@@ -21,6 +22,16 @@ import org.springframework.web.bind.annotation.*;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+
+
+    @GetMapping("/endereco/{cep}")
+    @Operation(summary = "Busca endereco via cep", description = "busca dados  via api cep")
+    @ApiResponse(responseCode = "200", description = "Dados buscados com sucesso")
+    @ApiResponse(responseCode = "400", description = "CEP invalido")
+    @ApiResponse(responseCode = "500", description = "erro interno de servidor")
+    public ResponseEntity<ResponseCepDto> buscarDadosCep(@PathVariable("cep") String cep){
+        return ResponseEntity.ok(usuarioService.buscarCep(cep));
+    }
 
     @PostMapping()
     @Operation(summary = "Cadastra um novo usuario", description = "Cria um novo usuario")
