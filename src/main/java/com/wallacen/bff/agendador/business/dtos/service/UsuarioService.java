@@ -1,6 +1,8 @@
 package com.wallacen.bff.agendador.business.dtos.service;
 
+import com.wallacen.bff.agendador.business.dtos.client.ViaCepClient;
 import com.wallacen.bff.agendador.business.dtos.dot.EnderecoDto;
+import com.wallacen.bff.agendador.business.dtos.dot.ResponseCepDto;
 import com.wallacen.bff.agendador.business.dtos.dot.TelefoneDto;
 import com.wallacen.bff.agendador.business.dtos.dot.UsuarioDto;
 import com.wallacen.bff.agendador.business.dtos.client.UsuarioClient;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class UsuarioService {
 
     private final UsuarioClient usuarioClient;
+    private final ViaCepClient viaCepClient;
 
     public UsuarioDto salvarUsuario(UsuarioDto usuarioDto) {
        return usuarioClient.salvarUsuario(usuarioDto);
@@ -50,6 +53,11 @@ public class UsuarioService {
 
     public TelefoneDto cadastraTelefone(String token, TelefoneDto telefoneDto) {
         return usuarioClient.cadastraTelefone(token, telefoneDto);
+    }
+
+    public ResponseCepDto buscarCep(String cep) {
+        return viaCepClient.buscaDadosEndereco((cep));
+
     }
 
 }
